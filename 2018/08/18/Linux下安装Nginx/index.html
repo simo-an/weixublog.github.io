@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Hello World｜undefined
+        Linux下安装Nginx｜undefined
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/2018/08/18/hello-world/">
+    <link rel="canonical" href="http://yoursite.com/2018/08/18/Linux下安装Nginx/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -137,7 +137,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Hello World</h1>
+                    <h1>Linux下安装Nginx</h1>
                     
                     <span class="meta">
                          作者 John Doe
@@ -147,6 +147,9 @@
                     </span>
                     <div class="tags text-center">
                         
+                        <a class="tag" href="/tags/#Linux Nginx"
+                           title="Linux Nginx">Linux Nginx</a>
+                        
                     </div>
                 </div>
             </div>
@@ -154,7 +157,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Hello World
+            Linux下安装Nginx
         </span>
     </div>
 </header>
@@ -165,26 +168,45 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <p>以下步骤详细说明如何在Linux下安装Nginx</p>
+<p>首先在一个Linux的系统上装上基本的软件，包括<code>gcc</code>，<code>openssl</code>，<code>wget</code>，<code>vim</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install -y gcc-c++</span><br><span class="line">yum install -y openssl openssl-devel</span><br><span class="line">yum install -y wget</span><br><span class="line">yum install -y vim</span><br></pre></td></tr></table></figure>
+<p><strong>安装pcre</strong><br><code>Nginx</code>的<code>http</code>模块需要使用<code>pcre</code>来解析正则表达式</p>
+<ul>
+<li><p>方式一 - 直接使用 yum 安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install pcre pcre-devel</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方式二 - 从官方下载压缩包进行安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget http://downloads.sourceforge.net/project/pcre/pcre/8.42/pcre-8.42.tar.gz</span><br><span class="line">tar zxvf pcre-8.42.tar.gz</span><br><span class="line">cd pcre-8.42</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>安装完成之后，我们使用如下命令查看安装的<code>pcre</code>的版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pcre-config --version</span><br></pre></td></tr></table></figure></p>
+<p><strong>安装Nginx</strong><br>由于<code>yum</code>库中没有<code>nginx</code>，所以需要我们自行下载安装，选择一个文件夹，执行如下指令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -c https://nginx.org/download/nginx-1.13.10.tar.gz</span><br><span class="line">tar -zxvf nginx-1.13.10.tar.gz</span><br><span class="line">cd nginx-1.13.10</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+<p>一般情况下<code>nginx</code>会安装在<code>/usr/local/nginx/</code>目录中，如果不是，可以使用如下指令查找<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whereis nginx</span><br></pre></td></tr></table></figure></p>
+<p>安装完成之后，我们使用如下命令查看安装的<code>nginx</code>的版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/nginx/sbin</span><br><span class="line">./nginx -v</span><br></pre></td></tr></table></figure></p>
+<p>对于<code>Nginx</code>的常用命令如下</p>
+<blockquote>
+<p><code>./nginx</code> 启动nginx<br><code>./nginx -s stop</code> 停止nginx,此方式相当于先查出nginx进程id再使用kill命令强制杀掉进程。<br><code>./nginx -s quit</code> 停止nginx，此方式停止步骤是待nginx进程处理任务完毕进行停止。<br><code>./nginx -s reload</code> 重启nginx，一般是重新载入配置文件时使用<br><code>./nginx -s reopen</code> 重启nginx，重新打开日志文件<br><code>./nginx -v</code> 查看nginx版本<br><code>./nginx -t</code> 查看配置文件正确性</p>
+</blockquote>
+<p>接下来我们启动<code>nginx</code>来查看是否可行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/nginx/sbin</span><br><span class="line">./nginx</span><br></pre></td></tr></table></figure></p>
+<p><code>nginx</code>默认的端口是<code>80</code>端口，我们这个时候需要将CentOS7的<code>80</code>端口打开，CentOS7使用firewalld打开关闭防火墙与端口，打开端口命令如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=80/tcp --permanent </span><br><span class="line">firewall-cmd --reload</span><br><span class="line">firewall-cmd --zone=public --list-ports</span><br></pre></td></tr></table></figure></p>
+<p>如果第三个命令执行后显示的list中有80端口，则说明80端口开放成功，我们就可以在浏览器上访问nginx了。</p>
+<p>对于<code>firewalld</code>的常用指令如下</p>
+<blockquote>
+<p>查看所有打开的端口： <code>firewall-cmd --zone=public --list-ports</code><br>添加一个端口： <code>firewall-cmd --zone=public --add-port=80/tcp --permanent</code>（<code>--permanent</code>表示永久生效，没有此参数重启后失效）<br>重新载入： <code>firewall-cmd --reload</code><br>删除一个端口：<code>firewall-cmd --zone= public --remove-port=80/tcp --permanent</code></p>
+</blockquote>
+<p>以上我们就完成了<code>Nginx</code>的安装</p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2018/08/18/Linux下安装Nginx/" data-toggle="tooltip" data-placement="top"
-                           title="Linux下安装Nginx">&larr; Previous Post</a>
-                    </li>
                     
+                    <li class="next">
+                        <a href="/2018/08/18/hello-world/" data-toggle="tooltip" data-placement="top"
+                           title="Hello World">Next Post &rarr;</a>
+                    </li>
                     
                 </ul>
 
@@ -202,7 +224,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+                    
                 </div>
             </div>
         </div>
