@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Hello World｜未绪个人博客
+        有关JavaScript中的尾部调用优化｜未绪个人博客
         
     </title>
 
-    <link rel="canonical" href="http://weixublog.xyz/2018/08/18/hello-world/">
+    <link rel="canonical" href="http://weixublog.xyz/2018/07/21/有关JavaScript中的尾调用优化/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -137,15 +137,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Hello World</h1>
+                    <h1>有关JavaScript中的尾部调用优化</h1>
                     
                     <span class="meta">
                          作者 Weixu
                         <span>
-                          日期 2018-08-18
+                          日期 2018-07-21
                          </span>
                     </span>
                     <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#JavaScript 代码优化"
+                           title="JavaScript 代码优化">JavaScript 代码优化</a>
                         
                     </div>
                 </div>
@@ -154,7 +157,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Hello World
+            有关JavaScript中的尾部调用优化
         </span>
     </div>
 </header>
@@ -165,15 +168,25 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <hr>
+<p>在函数式编程中的一个重要概念就是，其含义为：我们在函数的最后一步操作中调用另一个函数</p>
+<p>如下一个尾调用的实例</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function f(x) &#123;</span><br><span class="line">    return g(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在函数<code>f(x)</code>中，我们在其最后一步的返回函数中调用了函数<code>g(x)</code></p>
+<p>而，如下的几种情况比较容易混淆，但是由于不是在函数的最后一步调用另一个函数，故都不属于尾调用<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function f(x) &#123;</span><br><span class="line">    let y = g(x);</span><br><span class="line">    return y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function f(x) &#123;</span><br><span class="line">    return g(x) + 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function f(x) &#123;</span><br><span class="line">    g(x);</span><br><span class="line">    //最后还会返回一个undefined</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>那么使用尾调用具体的优化有体现在哪里呢？</p>
+<p>我们首先看如下的未进行优化的代码<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function f(x) &#123;</span><br><span class="line">    let y = x * x;</span><br><span class="line">    let z = g(y);</span><br><span class="line">    return z;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在调用函数<code>g(y)</code>的时候，由于其不是最后的语句，所有我们不能确定变量<code>x</code>和<code>y</code>在函数后面时候还有用，故这个时候就会生成一个对象保存这些变量以及<code>g(x)</code>函数的位置指针，并将该对象放到一个栈中去。</p>
+<p>那我们我们进行尾调用优化之后的代码如下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function f(x) &#123;</span><br><span class="line">    let y = x * x;</span><br><span class="line">    return g(y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于<code>g(y)</code>是最后一步调用的，故我们就可以非常明确变量<code>x</code>和<code>y</code>在函数后面不会再被调用了，而<code>g(x)</code>的位置信息也不会再用到了，故就不需要生成一个对象保存在栈中了。</p>
+<p>在一些调用量非常大的函数中，这种优化就会明显的提高程序的性能中。</p>
+<h3 id="尾递归"><a href="#尾递归" class="headerlink" title="尾递归"></a>尾递归</h3><p>如果使用递归的方式求解斐波那契数列或者阶乘等问题的时候，这个时候递归调用函数的次数是非常多的，我们就考虑进行尾调用优化（又称尾递归）</p>
+<p>如下一个求<code>n</code>阶乘的函数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function factorial(n) &#123;</span><br><span class="line">    if (n === 1) return 1;</span><br><span class="line">    return n * factorial(n - 1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很显然我们在函数执行完乘之后又对其进行了乘n的操作，这就会产生非常多的调用帧，很容易会产生”栈溢出”</p>
+<p>执行如下代码<code>factorial(16000)</code>，就会产生栈溢出，如下错误<code>VM275:1 Uncaught RangeError: Maximum call stack size exceeded</code></p>
+<p>这个时候我们对其进行尾调用优化，优化后代码如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function factorial(n, sum = 1) &#123;</span><br><span class="line">    if (n === 1) return sum;</span><br><span class="line">    return factorial(n - 1, n * sum);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
                 <hr>
                 
@@ -181,10 +194,15 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/08/18/Linux下安装Nginx/" data-toggle="tooltip" data-placement="top"
-                           title="Linux下安装Nginx">&larr; Previous Post</a>
+                        <a href="/2018/07/22/JavaScript中的Promise对象/" data-toggle="tooltip" data-placement="top"
+                           title="JavaScript中的Promise对象">&larr; Previous Post</a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/2018/07/20/有关JavaScript中的async&await/" data-toggle="tooltip" data-placement="top"
+                           title="有关JavaScript中的async&await">Next Post &rarr;</a>
+                    </li>
                     
                 </ul>
 
@@ -202,7 +220,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#尾递归"><span class="toc-text">尾递归</span></a></li></ol>
                 </div>
             </div>
         </div>
@@ -223,6 +241,9 @@
                         <a href="/tags/">FEATURED TAGS</a>
                     </h5>
                     <div class="tags">
+                        
+                        <a class="tag" href="/tags/#JavaScript 代码优化"
+                           title="JavaScript 代码优化">JavaScript 代码优化</a>
                         
                     </div>
                 </section>
