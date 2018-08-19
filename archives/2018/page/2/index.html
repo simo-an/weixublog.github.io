@@ -22,7 +22,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://weixublog.xyz/tags/Linux-Nginx/">
+    <link rel="canonical" href="http://weixublog.xyz/archives/2018/page/2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -43,7 +43,7 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="true
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
 " data-ishome = "false" >
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -145,19 +145,23 @@
 
 <div class="post-preview "
      style="background-image: url('http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg')">
-    <a href="/2018/08/18/Linux下安装Nginx/">
+    <a href="/2018/07/20/有关JavaScript中的async&await/">
         <h2 class="post-title">
-            Linux下安装Nginx
+            有关JavaScript中的async&await
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-08-18
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-07-20
         </p>
         
         <div class="post-content-preview">
             <p>
-                以下步骤详细说明如何在Linux下安装Nginx
-首先在一个Linux的系统上装上基本的软件，包括gcc，openssl，wget，vim
-yum install -y gcc-c++yum install -y openssl openssl-develyum install -y wgety..
+                经常会看到使用async和await来修饰函数，首先需要明确三点
+
+async修饰的对象的返回值是一个Promise对象
+await只能在async定义的函数内部使用
+遇到await时，其修饰的函数会立即执行，然后跳出其处于的被async修饰的对象
+
+  function normalFunc(..
             </p>
         </div>
     </a>
@@ -172,6 +176,10 @@ yum install -y gcc-c++yum install -y openssl openssl-develyum install -y wgety..
 <!-- 翻页 pager -->
 
 <ul class="pager">
+    
+    <li class="previous">
+        <a href="/archives/2018/">&larr; Newer Posts</a>
+    </li>
     
     
 </ul>

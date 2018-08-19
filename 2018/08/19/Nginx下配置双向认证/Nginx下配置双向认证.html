@@ -1,0 +1,30 @@
+<hr>
+<p>title: Nginx下配置双向认证<br>date: 2018-08-19 23:03:19</p>
+<h2 id="tags-Nginx-双向认证"><a href="#tags-Nginx-双向认证" class="headerlink" title="tags: Nginx 双向认证"></a>tags: Nginx 双向认证</h2><p>首先我们打开安装好的<code>Nginx</code>目录下的<code>nginx.conf</code>文件，在<code>http</code>下添加一个<code>server</code>，代码如下</p>
+<pre><code>server {
+    listen       443 ssl;        #端口  
+    server_name  localhost;      #服务名  
+    charset utf-8; # 避免中文乱码
+    root    ../cfg;  #显示的根索引目录，注意这里要改成你自己的，目录要存在 
+
+    ssl on;
+    ssl_certificate ../ssh/ops.crt;
+    ssl_certificate_key ../ssh/ops.key; 
+    ssl_client_certificate ../ssh/yealink_ca.crt;
+    ssl_verify_client on;
+
+    location / {
+        autoindex on;             #开启索引功能  
+        autoindex_exact_size off; # 关闭计算文件确切大小（单位bytes），只显示大概大小（单位kb、mb、gb）  
+        autoindex_localtime on;   # 显示本机时间而非 GMT 时间  
+    }
+}
+</code></pre><p>上面的代码的功能是访问 <code>conf</code> 的上一级目录下 <code>cfg</code>目录下的文件</p>
+<p>其中设计到双向认证的核心代码如下</p>
+<pre><code>ssl_certificate ../ssh/ops.crt;
+ssl_certificate_key ../ssh/ops.key; 
+ssl_client_certificate ../ssh/yealink_ca.crt;
+ssl_verify_client on;
+</code></pre><p>该配置项中我们配置了一个服务器端证书，服务器端私钥，以及信任的客户端证书，然后打开了客户端验证</p>
+<p>这样就会使得客户端和服务器通信的时候，服务器会检客户端的正式是否是已经加入到信任的，与此同时，客户端也会检测服务器的证书是否是有效的。</p>
+<p>于是就完成了双向认证的过程。</p>

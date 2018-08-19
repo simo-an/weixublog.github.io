@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        未绪个人博客
+        Nginx下配置双向认证｜未绪个人博客
         
     </title>
 
-    <link rel="canonical" href="http://weixublog.xyz/tags/Linux-Nginx/">
+    <link rel="canonical" href="http://weixublog.xyz/2018/08/19/Nginx下配置双向认证/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -43,7 +43,7 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="true
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
 " data-ishome = "false" >
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -116,174 +116,150 @@
 
 <!-- Main Content -->
 
+<!--only post-->
 
-<!-- Page Header -->
-<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 visible-xs-block visible-sm-block">
-    <div class="row">
-        <header class="intro-header">
-            <div class="container">
-                <div class="site-heading text-center">
-                    <div class="about-me">
-                        <!--移动端头部显示-->
-                        <img src="http://p7idy9jq3.bkt.clouddn.com/user-weixu-avatar.jpg"/>
-                        <h5><a href="/about/">Weixu</a></h5>
-                        <p>人往往要说很多话,然后才能归于潜默</p>
+
+<img class="wechat-title-img"
+     src="http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Nginx下配置双向认证</h1>
+                    
+                    <span class="meta">
+                         作者 Weixu
+                        <span>
+                          日期 2018-08-19
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Nginx 双向认证"
+                           title="Nginx 双向认证">Nginx 双向认证</a>
+                        
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
     </div>
-</div>
-<!-- Main Content -->
-<div class="container custom-haojen-container">
-    <!-- Post Container -->
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
-            <!-- Main Content -->
+    <div class="post-title-haojen">
+        <span>
+            Nginx下配置双向认证
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>首先我们打开安装好的<code>Nginx</code>目录下的<code>nginx.conf</code>文件，在<code>http</code>下添加一个<code>server</code>，代码如下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">       listen       443 ssl;        #端口  </span><br><span class="line">       server_name  localhost;      #服务名  </span><br><span class="line">       charset utf-8; # 避免中文乱码</span><br><span class="line">       root    ../cfg;  #显示的根索引目录，注意这里要改成你自己的，目录要存在 </span><br><span class="line"></span><br><span class="line">       ssl on;</span><br><span class="line">       ssl_certificate ../ssh/ops.crt;</span><br><span class="line">       ssl_certificate_key ../ssh/ops.key; </span><br><span class="line">       ssl_client_certificate ../ssh/yealink_ca.crt;</span><br><span class="line">       ssl_verify_client on;</span><br><span class="line"></span><br><span class="line">       location / &#123;</span><br><span class="line">           autoindex on;             #开启索引功能  </span><br><span class="line">           autoindex_exact_size off; # 关闭计算文件确切大小（单位bytes），只显示大概大小（单位kb、mb、gb）  </span><br><span class="line">           autoindex_localtime on;   # 显示本机时间而非 GMT 时间  </span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码的功能是访问 <code>conf</code> 的上一级目录下 <code>cfg</code>目录下的文件</p>
+<p>其中设计到双向认证的核心代码如下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssl_certificate ../ssh/ops.crt;</span><br><span class="line">ssl_certificate_key ../ssh/ops.key; </span><br><span class="line">ssl_client_certificate ../ssh/yealink_ca.crt;</span><br><span class="line">ssl_verify_client on;</span><br></pre></td></tr></table></figure></p>
+<p>该配置项中我们配置了一个服务器端证书，服务器端私钥，以及信任的客户端证书，然后打开了客户端验证</p>
+<p>这样就会使得客户端和服务器通信的时候，服务器会检客户端的正式是否是已经加入到信任的，与此同时，客户端也会检测服务器的证书是否是有效的。</p>
+<p>于是就完成了双向认证的过程。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/08/19/Nginx下配置双向认证/Nginx下配置双向认证/" data-toggle="tooltip" data-placement="top"
+                           title="Nginx下配置双向认证">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/08/19/对称加密和非对称加密/" data-toggle="tooltip" data-placement="top"
+                           title="对称加密和非对称加密">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
 
 
+                <!--加入新的评论系统-->
+                
 
-<div class="post-preview "
-     style="background-image: url('http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg')">
-    <a href="/2018/08/18/Linux下安装Nginx/">
-        <h2 class="post-title">
-            Linux下安装Nginx
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-08-18
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                以下步骤详细说明如何在Linux下安装Nginx
-首先在一个Linux的系统上装上基本的软件，包括gcc，openssl，wget，vim
-yum install -y gcc-c++yum install -y openssl openssl-develyum install -y wgety..
-            </p>
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    
+                </div>
+            </div>
         </div>
-    </a>
 
-</div>
+        <div class="row">
+            <!-- Sidebar Container -->
 
-<hr>
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
 
-
-
-
-<!-- 翻页 pager -->
-
-<ul class="pager">
-    
-    
-</ul>
-
-
-        </div>
-        <!-- Sidebar Container -->
-        <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
-
-            <!-- About Me -->
-            <section class="visible-md visible-lg" style="padding: 0 18px">
-                <div class="short-about">
-                    <!--侧边栏头像-->
-                    
-                    <img src="http://p7idy9jq3.bkt.clouddn.com/user-weixu-avatar.jpg"/>
-                    
-                    <h5><a href="/about/">Weixu</a></h5>
-                    
-                    <p>人往往要说很多话,然后才能归于潜默</p>
-                    
-                    <hr>
-                    <!-- SNS Link 社交 -->
-                    <ul class="list-inline">
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
                         
+                        <a class="tag" href="/tags/#Nginx 双向认证"
+                           title="Nginx 双向认证">Nginx 双向认证</a>
                         
-                        
-                        <li>
-                            <a target="_blank" href="https://www.zhihu.com/people/zhang-jun-qiang-8">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                        </span>
-                            </a>
-                        </li>
-                        
+                    </div>
+                </section>
+                
 
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
                         
-                        <li>
-                            <a target="_blank" href="http://weibo.com/5349923281">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                                        </span>
-                            </a>
-                        </li>
+                        <li><a href="https://blog.csdn.net/zjq_1314520">片刻清夏</a></li>
                         
-
-                        
-
-                        
-                        <li>
-                            <a target="_blank" href="https://github.com/weixublog">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                            </a>
-                        </li>
-                        
-
+                        <li><a href="http://blog.csdn.net/babychen_i">你是光i</a></li>
                         
                     </ul>
                 </div>
-            </section>
-
-            <!-- Featured Tags  标签 -->
-            
-            <section>
-                <div class="tags">
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    <a href="/tags/#Nginx 双向认证" title="Nginx 双向认证"
-                       rel="3">Nginx 双向认证</a>
-                    
-                    
-                </div>
-            </section>
-            
-
-            
-            <hr>
-            <h5 style="text-align: center;">Friends</h5>
-            <ul class="list-inline" style="text-align: center;">
                 
-                <li><a href="https://blog.csdn.net/zjq_1314520" target="_blank">片刻清夏</a></li>
-                
-                <li><a href="http://blog.csdn.net/babychen_i" target="_blank">你是光i</a></li>
-                
-            </ul>
-            
-
+            </div>
         </div>
+
     </div>
-</div>
+</article>
+
+
+
+
+
+
 
 <!-- Footer -->
 <!-- Footer -->
