@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Linux下安装Nginx｜未绪个人博客
+        对称加密和非对称加密｜未绪个人博客
         
     </title>
 
-    <link rel="canonical" href="http://weixublog.xyz/2018/08/18/Linux下安装Nginx/">
+    <link rel="canonical" href="http://weixublog.xyz/2018/08/19/对称加密和非对称加密/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -137,18 +137,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Linux下安装Nginx</h1>
+                    <h1>对称加密和非对称加密</h1>
                     
                     <span class="meta">
                          作者 Weixu
                         <span>
-                          日期 2018-08-18
+                          日期 2018-08-19
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#Linux Nginx"
-                           title="Linux Nginx">Linux Nginx</a>
+                        <a class="tag" href="/tags/#加密类型"
+                           title="加密类型">加密类型</a>
                         
                     </div>
                 </div>
@@ -157,7 +157,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Linux下安装Nginx
+            对称加密和非对称加密
         </span>
     </div>
 </header>
@@ -168,34 +168,29 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>以下步骤详细说明如何在Linux下安装Nginx</p>
-<p>首先在一个Linux的系统上装上基本的软件，包括<code>gcc</code>，<code>openssl</code>，<code>wget</code>，<code>vim</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install -y gcc-c++</span><br><span class="line">yum install -y openssl openssl-devel</span><br><span class="line">yum install -y wget</span><br><span class="line">yum install -y vim</span><br></pre></td></tr></table></figure>
-<p><strong>安装pcre</strong><br><code>Nginx</code>的<code>http</code>模块需要使用<code>pcre</code>来解析正则表达式</p>
-<ul>
-<li><p>方式一 - 直接使用 yum 安装</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum -y install pcre pcre-devel</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>方式二 - 从官方下载压缩包进行安装</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http://downloads.sourceforge.net/project/pcre/pcre/8.42/pcre-8.42.tar.gz</span><br><span class="line">tar zxvf pcre-8.42.tar.gz</span><br><span class="line">cd pcre-8.42</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>安装完成之后，我们使用如下命令查看安装的<code>pcre</code>的版本<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pcre-config --version</span><br></pre></td></tr></table></figure></p>
-<p><strong>安装Nginx</strong><br>由于<code>yum</code>库中没有<code>nginx</code>，所以需要我们自行下载安装，选择一个文件夹，执行如下指令<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -c https://nginx.org/download/nginx-1.13.10.tar.gz</span><br><span class="line">tar -zxvf nginx-1.13.10.tar.gz</span><br><span class="line">cd nginx-1.13.10</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
-<p>一般情况下<code>nginx</code>会安装在<code>/usr/local/nginx/</code>目录中，如果不是，可以使用如下指令查找<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">whereis nginx</span><br></pre></td></tr></table></figure></p>
-<p>安装完成之后，我们使用如下命令查看安装的<code>nginx</code>的版本<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd /usr/local/nginx/sbin</span><br><span class="line">./nginx -v</span><br></pre></td></tr></table></figure></p>
-<p>对于<code>Nginx</code>的常用命令如下</p>
-<blockquote>
-<p><code>./nginx</code> 启动nginx<br><code>./nginx -s stop</code> 停止nginx,此方式相当于先查出nginx进程id再使用kill命令强制杀掉进程。<br><code>./nginx -s quit</code> 停止nginx，此方式停止步骤是待nginx进程处理任务完毕进行停止。<br><code>./nginx -s reload</code> 重启nginx，一般是重新载入配置文件时使用<br><code>./nginx -s reopen</code> 重启nginx，重新打开日志文件<br><code>./nginx -v</code> 查看nginx版本<br><code>./nginx -t</code> 查看配置文件正确性</p>
-</blockquote>
-<p>接下来我们启动<code>nginx</code>来查看是否可行<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd /usr/local/nginx/sbin</span><br><span class="line">./nginx</span><br></pre></td></tr></table></figure></p>
-<p><code>nginx</code>默认的端口是<code>80</code>端口，我们这个时候需要将CentOS7的<code>80</code>端口打开，CentOS7使用firewalld打开关闭防火墙与端口，打开端口命令如下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=80/tcp --permanent </span><br><span class="line">firewall-cmd --reload</span><br><span class="line">firewall-cmd --zone=public --list-ports</span><br></pre></td></tr></table></figure></p>
-<p>如果第三个命令执行后显示的list中有80端口，则说明80端口开放成功，我们就可以在浏览器上访问nginx了。</p>
-<p>对于<code>firewalld</code>的常用指令如下</p>
-<blockquote>
-<p>查看所有打开的端口： <code>firewall-cmd --zone=public --list-ports</code><br>添加一个端口： <code>firewall-cmd --zone=public --add-port=80/tcp --permanent</code>（<code>--permanent</code>表示永久生效，没有此参数重启后失效）<br>重新载入： <code>firewall-cmd --reload</code><br>删除一个端口：<code>firewall-cmd --zone= public --remove-port=80/tcp --permanent</code></p>
-</blockquote>
-<p>以上我们就完成了<code>Nginx</code>的安装</p>
+                <hr>
+<p><strong>对称加密</strong></p>
+<p>简单一句话概括就是：加密和解密的密钥是同一个</p>
+<p>模拟浏览器和服务器的使用对称密钥加密的过程，举个简单的例子进行说明：<br>在高中的时候，班上的小明喜欢上了小红，然后小明就想通过书信的形势向小红表明自己心意。（就像我们浏览器和服务器之间的数据通信）<br>但是为了防止他的书信信息被他们的家长非法窃取，于是小明就去定做了一个带有锁的箱子，并制作了两把相同的钥匙，给了一把给小红。（就像浏览器将自己的对称密钥发送给服务器的过程）<br>然后小明写好了一封信，放在箱子里，用自己的钥匙锁上，寄给了小红。（浏览器构造了一个加密的数据包发送给了服务器）<br>小红收到数据之后，用小明给的钥匙打开，并查看了书信。 （服务器通过浏览器给的密钥解密浏览器数据）</p>
+<p>这样就会产生一个问题，小明可以直接将密钥给小红，那么我们的服务器要怎样得到浏览器的密钥呢？</p>
+<p>或许有的人会说，事先将浏览器的密钥存放在服务器不久可以了吗？<br>但是我们的用户非常多的，我们不可能将所有的密钥都存放在我们的服务器吧？</p>
+<p>这时候就引出了接下来要说的 非对称加密</p>
+<p><strong>非对称加密</strong></p>
+<p>首先明白如下前提：<br>浏览器有自己的公钥和私钥<br>服务器也有自己的公钥和私钥<br>公钥加密的数据只有私钥才能解密，反之亦然<br>公钥可以对外公开，私钥只能自己知道</p>
+<p>总结一句话就是说：加密和解密的密钥不是同一个</p>
+<p>其应用场景就是浏览器将自己的对称密钥发送给服务器</p>
+<p>首先浏览器向服务器放送一个请求，告诉浏览器我们跟你通信啦。<br>然后浏览器将自己的公钥回送给浏览器（其实还会发送证书等信息）<br>浏览器这个时候自己就生成了一个密钥对（公钥和私钥）<br>浏览器将自己的私钥通过服务器回送的公钥加密后又发送给了服务器<br>服务器用自己的私钥将其解密，得到浏览器的私钥</p>
+<p>以上就是服务器得到浏览器私钥的过程。</p>
+<p>类比到小明和小红之间的故事，如下所示<br>小明和小红已经在一起了，这个时候小红的闺蜜小花窃取了小红的密钥，并复制了一把，然后用该密钥加密了一封信发给了小红，说:”我们分手吧”，小红找到小明，小明解释之后，双方都说是对方的钥匙被别人窃取了。</p>
+<p>显然这个时候并不能确定是谁的钥匙丢了，聪明的小明又想到了一个好办法。</p>
+<p>他自己打造了一个两把不同的钥匙，其中一把钥匙加密的数据，只能通过另一本钥匙解密<br>并且小红也是同样如此</p>
+<p>公钥双方都是知道了，但是私钥是双方都不知道的</p>
+<p>于是，小明先用自己私钥将自己写的书信进行加密后，再用小红的公钥对书信再加密一次，然后将该书信寄出去了</p>
+<p>小红收到数据后，先用自己的私钥解密一次后，再用小明的公钥解密一次，就看到了书信的内容。</p>
+<p>这个时候呢，小红的闺蜜小花还不知道他们换了加密的方式，就再次窃取了小红私钥，加密后发送给了小红，小红收到信息之后发现没有解密出来，就知道当前的信息不是小明发送的了。</p>
+<p>这个时候小明的同桌小张也喜欢上了小红，而且知道他们之间是通过这种方式交流</p>
+<p>于是就窃取了小明的公钥和私钥，然后伪造了一封信发送了过去，说:”我们分手吧”</p>
+<p>这个时候小红收到信后问小明是怎么回事，这个时候小明就知道是自己的密钥泄露了。</p>
 
                 <hr>
                 
@@ -203,14 +198,14 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/08/19/对称加密和非对称加密/" data-toggle="tooltip" data-placement="top"
-                           title="对称加密和非对称加密">&larr; Previous Post</a>
+                        <a href="/2018/08/19/有关Https的详解/" data-toggle="tooltip" data-placement="top"
+                           title="有关Https的详解">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2018/07/22/JavaScript中的Promise对象/" data-toggle="tooltip" data-placement="top"
-                           title="JavaScript中的Promise对象">Next Post &rarr;</a>
+                        <a href="/2018/08/18/Linux下安装Nginx/" data-toggle="tooltip" data-placement="top"
+                           title="Linux下安装Nginx">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -251,8 +246,8 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#Linux Nginx"
-                           title="Linux Nginx">Linux Nginx</a>
+                        <a class="tag" href="/tags/#加密类型"
+                           title="加密类型">加密类型</a>
                         
                     </div>
                 </section>

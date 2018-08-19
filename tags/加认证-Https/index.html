@@ -22,7 +22,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://weixublog.xyz/archives/2018/">
+    <link rel="canonical" href="http://weixublog.xyz/tags/加认证-Https/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -43,7 +43,7 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="true
 " data-ishome = "false" >
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -159,140 +159,6 @@
 我们知道Http协议传输数据使明文的，这样就会导致在传输某些敏感信息的时候可能会被截取报文信息，这样就会导致安全隐患。而Https协议就是在Http协议的基础上SSL协议，SSL依靠证书来验证服务器身份，并未浏览器和服务器之前的数据通信进行加密。
 现在我们需要知道有关Https的如下四点内容
 ..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg')">
-    <a href="/2018/08/19/对称加密和非对称加密/">
-        <h2 class="post-title">
-            对称加密和非对称加密
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-08-19
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                
-对称加密
-简单一句话概括就是：加密和解密的密钥是同一个
-模拟浏览器和服务器的使用对称密钥加密的过程，举个简单的例子进行说明：在高中的时候，班上的小明喜欢上了小红，然后小明就想通过书信的形势向小红表明自己心意。（就像我们浏览器和服务器之间的数据通信）但是为了防止他的书信信息被他们的家长非法窃取，..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg')">
-    <a href="/2018/08/18/Linux下安装Nginx/">
-        <h2 class="post-title">
-            Linux下安装Nginx
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-08-18
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                以下步骤详细说明如何在Linux下安装Nginx
-首先在一个Linux的系统上装上基本的软件，包括gcc，openssl，wget，vim
-yum install -y gcc-c++yum install -y openssl openssl-develyum install -y wgety..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg')">
-    <a href="/2018/07/22/JavaScript中的Promise对象/">
-        <h2 class="post-title">
-            JavaScript中的Promise对象
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-07-22
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                在ES6中，Promise对象成为了一个原生对象，有关其基本的用法如下
-我们经常会看到格式如下的代码
-Promise.resolve(&quot;success&quot;).then(result =&gt; &#123;  console.log(result);&#125;);
-控制台打出..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg')">
-    <a href="/2018/07/21/有关JavaScript中的尾调用优化/">
-        <h2 class="post-title">
-            有关JavaScript中的尾部调用优化
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-07-21
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                
-在函数式编程中的一个重要概念就是，其含义为：我们在函数的最后一步操作中调用另一个函数
-如下一个尾调用的实例
-function f(x) &#123;    return g(x);&#125;
-在函数f(x)中，我们在其最后一步的返回函数中调用了函数g(x)
-而，如下的几种情况比较容易混淆，但..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg')">
-    <a href="/2018/07/20/有关JavaScript中的async&await/">
-        <h2 class="post-title">
-            有关JavaScript中的async&await
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-07-20
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                经常会看到使用async和await来修饰函数，首先需要明确三点
-
-async修饰的对象的返回值是一个Promise对象
-await只能在async定义的函数内部使用
-遇到await时，其修饰的函数会立即执行，然后跳出其处于的被async修饰的对象
-
-  function normalFunc(..
             </p>
         </div>
     </a>
