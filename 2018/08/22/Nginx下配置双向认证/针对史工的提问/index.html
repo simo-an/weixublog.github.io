@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="人往往要说很多话,然后才能归于潜默">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://p7idy9jq3.bkt.clouddn.com/user-weixu-avatar.jpg">
+    <link rel="alternate" type="application/atom+xml" title="未绪" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        未绪个人博客
+        
+    </title>
+
+    <link rel="canonical" href="http://weixublog.xyz/2018/08/22/Nginx下配置双向认证/针对史工的提问/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    未绪
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p7idy9jq3.bkt.clouddn.com/weixu-cover-1.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1></h1>
+                    
+                    <span class="meta">
+                         作者 Weixu
+                        <span>
+                          日期 2018-08-22
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="针对史工的提问"><a href="#针对史工的提问" class="headerlink" title="针对史工的提问"></a>针对史工的提问</h1><p>标签（空格分隔）： 双向认证</p>
+<hr>
+<p><strong>1、NG和Tomcat搭建过程是怎样的？</strong></p>
+<p><strong>以下是Nginx的配置过程</strong></p>
+<p>首先将我们生成的服务端证书以及信任的客户端证书放置到某一目录下</p>
+<p>然后再 Nginx 的配置文件中，配置如下代码即可<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssl on;</span><br><span class="line">ssl_certificate server.crt;		//服务器证书</span><br><span class="line">ssl_certificate_key server.key;	//服务器私钥</span><br><span class="line">ssl_client_certificate client.crt;	//客户端证书</span><br><span class="line">ssl_verify_client on;			//开启客户端验证</span><br></pre></td></tr></table></figure></p>
+<p><strong>以下是Tomcat下的配置过程</strong><br>配置到Tomcat下需要keystore文件，以下为从 crt 文件 以及 key 文件转化为 keystore 的指令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">第一步，从key和crt生成pkcs12格式的keystore</span><br><span class="line"></span><br><span class="line">openssl pkcs12 -export -in test.crt -inkey test.key -out test.p12 -name tomcat -CAfile server.crt -caname root -chain</span><br><span class="line"></span><br><span class="line">第二步 生成tomcat需要的keystore</span><br><span class="line"></span><br><span class="line">keytool -importkeystore -v  -srckeystore test.p12 -srcstoretype pkcs12 -srcstorepass 123456 -destkeystore test.keystore -deststoretype jks -deststorepass 123456</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">第三步 生成受信任的客户端证书</span><br><span class="line"></span><br><span class="line">keytool -genkey -v -alias mykey -keyalg RSA -storetype PKCS12 -keystore client.p12</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">第四步 让服务器信任客户端证书</span><br><span class="line"></span><br><span class="line">keytool -export -alias mykey -keystore client.p12 -storetype PKCS12 -storepass 123456 -rfc -file client.cer  #将客户端证书导出为一个单独的CER文件</span><br><span class="line"></span><br><span class="line">第五步 将CER文件导入到服务器的证书库</span><br><span class="line">keytool -import -v -file client.cer -keystore test.keystore</span><br><span class="line"></span><br><span class="line">第六步 检查安装结果</span><br><span class="line">keytool -list -keystore test.keystore</span><br></pre></td></tr></table></figure>
+<p>再配置如下即可完成双向验证</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;Connector port=&quot;8443&quot; protocol=&quot;HTTP/1.1&quot; SSLEnabled=&quot;true&quot;</span><br><span class="line">              maxThreads=&quot;150&quot; scheme=&quot;https&quot; secure=&quot;true&quot;</span><br><span class="line">              clientAuth=&quot;true&quot; sslProtocol=&quot;TLS&quot; </span><br><span class="line">		   keystoreFile=&quot;ssh/test.keystore&quot; keystorePass=&quot;123456&quot; </span><br><span class="line">		   truststoreFile=&quot;ssh/test.keystore&quot; truststorePass=&quot;123456&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p>PS:将 clientAuth 设置为 true 为开启客户端验证</p>
+<p><strong>2、Https的这些过程是怎么进行的？协议实现上每个阶段的主要信息有哪些？</strong></p>
+<p>由于添加不了图片，故详细见PPT</p>
+<p><strong>3、非对称加密；对称加密；摘要算法，分别用在上面的什么阶段？</strong><br>非对称加密 ： 建立连接的阶段<br>对称加密 ： 连接建立完成后的数据通信阶段<br>摘要算法 ：<br>主要用户根证书签出子证书时候，其详细流程如下</p>
+<p>假设 A 证书要对 B 证书进行签名</p>
+<p>先用摘要算法计算 B 的全部信息的摘要<br>用 A 的私钥对该 摘要信息 进行加密<br>最后将加密的信息写入到 B 的签名区域作为B的签名信息</p>
+<p>以下是认证的过程，即用 A 证书来认证 B 证书</p>
+<p>首先取出 B 证书的 签名区域的信息<br>用 A 的公钥对该信息进行解密<br>然后将解密后的信息于 B 的全部信息的摘要信息进行比较</p>
+<p>若结果一致，则认证通过</p>
+<p><strong>4、公钥和私钥怎么用？加密和签名过程有什么区别？公钥和私钥生成关系？</strong><br>（1）.公钥和私钥主要用于非对称加密，用公钥加密的数据只能用私钥解密，反之亦然<br>（2）.<br>        公钥加密私钥解密是 数据加密<br>        私钥加密公钥解密是 数据签名（如上A对B进行签名）<br>（3）私钥生出公钥，而公钥不能生成私钥<br>        OpenSSL 使用 PEM 文件格式存储证书和密钥，以下为转换的代码<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">genrsa -out rsa_private_key.pem 1024</span><br><span class="line">rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem</span><br></pre></td></tr></table></figure></p>
+<p><strong>5、证书；签发；CA；怎么签发自有证书？需要提供哪些信息？证书里面的级别是怎么回事？能不能从CA的证书再签发子证书？签发证书的时候可以选择密码是怎么回事？怎么防止证书被非法使用？如果证书泄露怎么补救？</strong></p>
+<p>(1)怎么签发自有证书？需要提供哪些信息？<br>先生成私钥,然后生成证书请求文件,最后自签出证书,openssl指令如下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">生成根证书文件</span><br><span class="line">openssl genrsa -des3 -out root.key</span><br><span class="line"></span><br><span class="line">创立根证书的申请文件root.csr：</span><br><span class="line">openssl req -new -key root.key -out root.csr</span><br><span class="line"></span><br><span class="line">创建根证书</span><br><span class="line">openssl x509 -req -days 3650 -sha1 -extensions v3_ca -signkey root.key -in root.csr -out root.crt</span><br><span class="line"></span><br><span class="line">生成自己的私钥</span><br><span class="line">openssl genrsa -des3 -out test.key 1024</span><br><span class="line"></span><br><span class="line">生成证书请求文件</span><br><span class="line"> req -new -key  myprivate.key  -out test.csr </span><br><span class="line"></span><br><span class="line">签出证书</span><br><span class="line"> openssl x509 -req -in test.csr -out test.crt -signkey test.key -CA root.crt -CAkey root.key -CAcreateserial -days 3650</span><br></pre></td></tr></table></figure></p>
+<p>(2)证书里面的级别是怎么回事？<br>目前SSL证书的等级主要有三级,验证级别依次递增<br>域名验证型SSL证书(DV) -&gt; 机构验证型SSL证书(OV)[<a href="https://www.zzidc.com/main/huodong/eightactive]" target="_blank" rel="noopener">https://www.zzidc.com/main/huodong/eightactive]</a> -&gt; 扩展验证型SSL证书(EV) (<a href="https://www.chinassl.net/ov_ssl/" target="_blank" rel="noopener">https://www.chinassl.net/ov_ssl/</a>)</p>
+<p>(3)能不能从CA的证书再签发子证书？<br>可以,使用openssl指令如下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">生成自己的私钥</span><br><span class="line">openssl genrsa -des3 -out myprivate.key 1024</span><br><span class="line"></span><br><span class="line">生成证书请求文件</span><br><span class="line"> req -new -key  myprivate.key  -out myprivate.csr </span><br><span class="line"></span><br><span class="line">签出证书</span><br><span class="line"> openssl x509 -req -in myprivate.csr -out myprivate.crt -signkey myprivate.key -CA server.crt -CAkey server.key -CAcreateserial -days 990</span><br></pre></td></tr></table></figure></p>
+<p>(4)签发证书的时候可以选择密码是怎么回事?</p>
+<p>(5)怎么防止证书被非法使用？如果证书泄露怎么补救？<br>证书被非法的情况为,再建立连接的时候,入侵者将自己的公钥以及窃取的证书发送回浏览器,以窃取浏览器的私钥,从而与浏览器进行通信</p>
+<p>防止证书被非法使用 =&gt; 保护好证书以及私钥<br>如果发现证书泄露 =&gt; 应立即更换服务器证书</p>
+<p><strong>什么是证书文件；证书请求文件；？</strong></p>
+<p>证书文件 : 证明服务器身份<br>证书请求文件 : 向正规CA机构或者自签证书时候提供的包含申请者详细信息的文件</p>
+<p><strong>7、SNI是什么</strong><br>如果一个服务器有多个域名,如 <a href="https://ldt.yealink.com" target="_blank" rel="noopener">https://ldt.yealink.com</a> <a href="https://ldt.yealinkops.com" target="_blank" rel="noopener">https://ldt.yealinkops.com</a><br>在连接到服务器建立SSL链接之前先发送要访问站点的域名<br>这样服务器根据这个域名返回一个合适的证书</p>
+<p><strong>8、部署双向认证的时候有哪些坑？为什么需要特殊版本的NG？</strong><br>(1) 连接不能带有端口,否则浏览器验证不通过<br>(2) tomcat配置信任证书是将要信任的证书导入到服务器证书</p>
+<p>公司的话机需要特殊版本的NG原因为 MD5证书签名问题</p>
+<p>centos7下面的openssl不支持md5 =&gt; 通过环境变量打开centos7下的openssl对md5的支持</p>
+<p>做出如下修改即可</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	1. 操作系统：vi /etc/profile</span><br><span class="line">export NSS_HASH_ALG_SUPPORT=+MD5</span><br><span class="line">export OPENSSL_ENABLE_MD5_VERIFY=1</span><br><span class="line">	2. Service:   Environment=&quot;OPENSSL_ENABLE_MD5_VERIFY=1 NSS_HASH_ALG_SUPPORT=+MD5&quot;</span><br><span class="line">	3. NG原代码：src/os/unix/ngx_process_cycle.c</span><br><span class="line">ngx_worker_process_cycle， ngx_log_debug0(NGX_LOG_DEBUG_EVENT, cycle-&gt;log, 0, &quot;worker cycle&quot;);</span><br><span class="line"></span><br><span class="line">-  char* p = getenv(&quot;OPENSSL_ENABLE_MD5_VERIFY&quot;);</span><br><span class="line">     if (!p)    </span><br><span class="line">     &#123;</span><br><span class="line">-        ngx_log_error(NGX_LOG_NOTICE, cycle-&gt;log, 0, &quot;! Can&apos;t get OPENSSL_ENABLE_MD5_VERIFY&quot;);</span><br><span class="line"></span><br><span class="line">-          setenv(&quot;OPENSSL_ENABLE_MD5_VERIFY&quot;, &quot;1&quot;, 1);</span><br><span class="line">-         p = getenv(&quot;OPENSSL_ENABLE_MD5_VERIFY&quot;);</span><br><span class="line">-     &#125;</span><br><span class="line">-     if (!p)</span><br><span class="line">-     &#123;</span><br><span class="line">-         ngx_log_error(NGX_LOG_NOTICE, cycle-&gt;log, 0, &quot;@ Can&apos;t get OPENSSL_ENABLE_MD5_VERIFY&quot;);</span><br><span class="line">-         setenv(&quot;OPENSSL_ENABLE_MD5_VERIFY&quot;, &quot;1&quot;, 1);</span><br><span class="line">-     &#125;</span><br><span class="line">-     else</span><br><span class="line">-     &#123;</span><br><span class="line">-         ngx_log_error(NGX_LOG_NOTICE, cycle-&gt;log, 0, &quot;@ Get OPENSSL_ENABLE_MD5_VERIFY: %s&quot;, p);</span><br><span class="line">-     &#125;</span><br></pre></td></tr></table></figure>
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/08/22/对于双向认证提问的整理/" data-toggle="tooltip" data-placement="top"
+                           title="对于双向认证提问的整理">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/08/19/tags- Nginx 双向认证/" data-toggle="tooltip" data-placement="top"
+                           title="Nginx下配置双向认证">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#针对史工的提问"><span class="toc-text">针对史工的提问</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://blog.csdn.net/zjq_1314520">片刻清夏</a></li>
+                        
+                        <li><a href="http://blog.csdn.net/babychen_i">你是光i</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/zhang-jun-qiang-8">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/5349923281">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/weixublog">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 未绪 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    <!-- Theme by <a href="https://haojen.github.io/">Haojen Ma</a> -->
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://weixublog.xyz/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p7idy9jq3.bkt.clouddn.com/user-weixu-avatar.jpg">
+</body>
+
+</html>
